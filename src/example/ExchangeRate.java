@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
+
 class ExchangeRate {
-    private final Scanner input = new Scanner(System.in);
-    private final Map<String, Double> rates = new HashMap<>();
+
+    protected final Scanner input = new Scanner(System.in);
+    protected final Map<String, Double> rates = new HashMap<>();
 
     public void loadRates() {
         try {
@@ -30,7 +32,9 @@ class ExchangeRate {
         String toCurr = getCurr("Введите целевую валюту:");
         double amount = getAmount();
         double result = amount * rates.get(toCurr) / rates.get(fromCurr);
+        System.out.printf("Ваша валюта в %s с учётом курса 1 %s = %s %s:\n",toCurr,fromCurr,rates.get(toCurr),toCurr);
         System.out.printf("%.2f %s = %.2f %s%n", amount, fromCurr, result, toCurr);
+
     }
 
     public String getCurr(String message) {
@@ -39,9 +43,12 @@ class ExchangeRate {
         {
             System.out.println(message);
             curr = input.next().toUpperCase();
+            if(!rates.containsKey(curr)){
+                System.out.println("Такого кода валюты нету в списке! Повторите снова.");
+            }
         }
         while (!rates.containsKey(curr));
-            return curr;
+        return curr;
     }
 
     public double getAmount() {
@@ -49,6 +56,7 @@ class ExchangeRate {
         do {
             System.out.println("Введите сумму для конвертации:");
             amount = input.nextDouble();
+
         } while (amount <= 0);
         return amount;
     }
